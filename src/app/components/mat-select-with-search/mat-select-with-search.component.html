@@ -1,0 +1,14 @@
+<div class="component">  
+<mat-form-field appearance="outline">
+    <mat-label>Dropdown</mat-label>
+    <mat-select (openedChange)="opened()" [formControl]="selectFormControl" multiple matInput>
+
+            <mat-form-field style="width: 100%;">
+              <input matInput placeholder="Search" [formControl]="searchText" (keyup)="filterOptions()">
+            </mat-form-field>
+          <span *ngIf="(filteredFoods).length == 0">
+           No results found!</span>
+        <mat-option *ngFor="let food of filteredFoods" [value]="food.value">{{food.viewValue}}</mat-option>
+    </mat-select>
+</mat-form-field>
+</div>
