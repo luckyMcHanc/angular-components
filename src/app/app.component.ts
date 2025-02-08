@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { MatSelectWithSearchComponent } from './components/mat-select-with-search/mat-select-with-search.component';
-import { MaterialsModule } from './materials/materials.module';
+import { ComponentsViewerComponent } from './pages/components-viewer/components-viewer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, MatSelectWithSearchComponent, MaterialsModule],
+  imports: [
+    CommonModule,
+    ComponentsViewerComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

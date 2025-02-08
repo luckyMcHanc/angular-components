@@ -1,0 +1,16 @@
+
+html, body, .container{
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction:row;
+  }
+  
+  app-side-nav{
+    flex: 1;
+    height: 100%;
+  }
+  
+  .selected-menu{
+    width: 80%;
+  }
