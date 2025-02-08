@@ -1,0 +1,11 @@
+<div class="sidenav-wrapper">
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav  class="sidenav" #sidenav mode="side" opened>
+      <mat-toolbar>Menu</mat-toolbar>
+      <mat-nav-list>
+        <a *ngFor="let value of listOfValues" (click)="onClick(value.name)" mat-list-item>{{value.name}}</a>
+      </mat-nav-list>
+    </mat-sidenav>
+  </mat-sidenav-container>
+  </div>
+  
