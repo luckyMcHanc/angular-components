@@ -9,7 +9,8 @@ import {MatListModule} from '@angular/material/list';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [],
@@ -24,6 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatIconModule,
     MatListModule,
     MatButtonModule,
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   exports:[
     CommonModule,
@@ -36,6 +39,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatIconModule,
     MatListModule,
     MatButtonModule,
+    MatAutocompleteModule,
+    MatChipsModule
   ],
+
 })
 export class MaterialsModule { }

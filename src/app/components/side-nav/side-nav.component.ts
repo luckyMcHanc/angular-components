@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output,  } from '@angular/core';
 import { AppComponentsModule } from '../../app-components.module';
 import e from 'express';
+import { MaterialsModule } from '../../materials/materials.module';
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
-  imports: [AppComponentsModule],
+  imports: [MaterialsModule],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss'
 })

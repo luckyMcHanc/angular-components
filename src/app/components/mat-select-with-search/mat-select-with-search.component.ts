@@ -8,13 +8,14 @@ import { AppComponentsModule } from '../../app-components.module';
 @Component({
   selector: 'app-mat-select-with-search',
   standalone: true,
-  imports: [AppComponentsModule],
+  imports: [MaterialsModule],
   templateUrl: './mat-select-with-search.component.html',
   styleUrl: './mat-select-with-search.component.scss'
 })
 export class MatSelectWithSearchComponent {
 
 
+  
   searchText = new FormControl();
   selectFormControl = new FormControl();
   foods = [
