@@ -11,16 +11,29 @@ import { AppComponentsModule } from '../../app-components.module';
 export class ComponentsViewerComponent {
 
 selectedMenu!: string;
+listOfAddedValues: any[] = [];
+hasSubValues = true;
+subValueKeys: any[] = ["subValues", "name"]
 listOfElement:any[]=  [
     {
-      "name": "Mat Multi Select", "url":"#"
+      "name": "Mat Multi Select", "subValues":[{
+        "name": "amo",},{
+        "name": "Inno"
+      }]
     },
     {
-      "name": "about", "url":"#"
+      "name": "about","subValues":[{
+        "name": "amo",},{
+        "name": "Inno"
+      }]
     }
   ];
 
 handleEvent(menuItem: string) {
  this.selectedMenu = menuItem
+}
+
+changeEvent($event: any){
+    this.listOfAddedValues=[...$event];
 }
 }

@@ -11,6 +11,7 @@ import {MatInputModule} from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [],
@@ -26,7 +27,8 @@ import {MatChipsModule} from '@angular/material/chips';
     MatListModule,
     MatButtonModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatCheckboxModule
   ],
   exports:[
     CommonModule,
@@ -40,7 +42,8 @@ import {MatChipsModule} from '@angular/material/chips';
     MatListModule,
     MatButtonModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    MatCheckboxModule
   ],
 
 })

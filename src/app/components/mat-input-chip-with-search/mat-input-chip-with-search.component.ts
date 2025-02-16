@@ -1,8 +1,18 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MaterialsModule } from '../../materials/materials.module';
-import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { FormControl } from '@angular/forms';
-import { Console } from 'console';
+
+export class ItemList {
+  constructor(
+    public item: string, 
+    public subItem: {name: string, selected?: boolean},
+    public selected?: boolean
+  
+  ) {
+    if (selected === undefined) selected = false;
+  }
+}
 
 @Component({
   selector: 'app-mat-input-chip-with-search',
@@ -12,72 +22,95 @@ import { Console } from 'console';
   styleUrl: './mat-input-chip-with-search.component.scss'
 })
 export class MatInputChipWithSearchComponent {
-  @Input() listOfValues = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'},
-  ];
+
+  _listOfAddedValues:any[] = [];
+  private _listOfValues:any[] = [];
+
+  @Input() set listOfAddedValues(values: any[]){
+    this._listOfAddedValues = values
+  }
+  
+
+  filteredListOfAddedValues:any[] = [];
+  @Input({ required: true}) set listOfValues(values: any[]){
+    this._listOfValues= values;
+    this.filteredListOfAddedValues = values.filter(option => 
+      !this._listOfAddedValues.includes(option[this.key].toLowerCase()));
+  };
   @Input() searchText = new FormControl();
   @Input() placeholder = "Search";
-  @Input() fieldName = "Fill form field";
-  listOfAddedValues:any[] = [];
+  @Input({ required: true}) label = "Fill form field";
+  @Input({ required: true}) id!: string;
+  @Input({ required: true}) key!: string;
+  @Output() changeEvent = new EventEmitter<any[]>();
+  @Input() hasSubValues:boolean = false;
+  @Input() subValueKeys: any[] = []
   
-  filteredListOfAddedValues:any[] = this.listOfValues.filter(option => 
-    !this.listOfAddedValues.includes(option.viewValue.toLowerCase()));
-
-
-  constructor(private cdr: ChangeDetectorRef){}
-
 
   remove(addedValue: any): void {
-    const index = this.listOfAddedValues.indexOf(addedValue);
+    const index = this._listOfAddedValues.indexOf(addedValue);
     if (index > -1) {
-      this.listOfAddedValues.splice(index, 1);
+      this._listOfAddedValues.splice(index, 1);
     }
     this.filteredListOfAddedValues = this.filterUnaddedValues();
+    this.changeEvent.emit([...this._listOfAddedValues]);
   }
 
-  edit(_t9: any,$event: MatChipEditedEvent) {
     
+  add(event:any, inputField: HTMLInputElement): void {
+    const value = event.trim();
+    if (value && !this._listOfAddedValues.includes(value)) {
+      this._listOfAddedValues.push(value);
     }
-    
-    add(event:any, inputField: HTMLInputElement): void {
-      const value = event.trim();
-      if (value) {
-        this.listOfAddedValues.push(value);
-      }
-      this.filteredListOfAddedValues = this.filterUnaddedValues();
-      inputField.value = '';
-      this.searchText.setValue('');
+    this.filteredListOfAddedValues = this.filterUnaddedValues();
+    inputField.value = '';
+    this.searchText.setValue('');
+    this.changeEvent.emit([...this._listOfAddedValues]);
+  }
 
+  filterList() {
+    const searchTerm = this.searchText.value?.trim().toLowerCase() || '';
+
+    this.filteredListOfAddedValues = searchTerm ? this._listOfValues.filter(option => 
+      option[this.key].toLowerCase().includes(searchTerm) && 
+      this._listOfValues.filter(option => 
+        !this._listOfAddedValues.some(addedValue => addedValue.toLowerCase() === option[this.key].toLowerCase())
+      ) 
+    ): this.filterUnaddedValues();
+  }
+
+  addOnEnter(event: MatChipInputEvent) {
+
+        const searchTerm = event.value?.trim().toLowerCase() || '';
+        if (!this.hasSubValues &&
+           (this._listOfValues.some(option => option[this.key].toLowerCase() === searchTerm) &&
+            !this._listOfAddedValues.includes(searchTerm))) {
+          this._listOfAddedValues.push(searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1));
+        }       
+        event.chipInput!.clear();
+        this.searchText.setValue('');
+        this.filteredListOfAddedValues = this.filterUnaddedValues();
+        this.changeEvent.emit([...this._listOfAddedValues]);
     }
 
-    filterList() {
-      const searchTerm = this.searchText.value?.trim().toLowerCase() || '';
-
-        this.filteredListOfAddedValues = searchTerm ? this.listOfValues.filter(option => 
-          option.viewValue.toLowerCase().includes(searchTerm) && 
-          this.listOfValues.filter(option => 
-            !this.listOfAddedValues.some(addedValue => addedValue.toLowerCase() === option.viewValue.toLowerCase())
-          ) 
-        ): this.filterUnaddedValues();
+    filterUnaddedValues(){
+      return this._listOfValues.filter(option => 
+        !this._listOfAddedValues.some(addedValue => addedValue.toLowerCase() === option[this.key].toLowerCase())
+      );
     }
 
-    addOnEnter(event: MatChipInputEvent) {
+    isSelected(value:any): boolean {
+      return this._listOfAddedValues.some(addedValue => addedValue.toLowerCase() === value.toLowerCase())
+    }
 
-          const searchTerm = event.value?.trim().toLowerCase() || '';
-          if (this.listOfValues.some(food => food.viewValue.toLowerCase() === searchTerm)) {
-            this.listOfAddedValues.push(searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1));
-          }       
-          event.chipInput!.clear();
-          this.searchText.setValue('');
-          this.filteredListOfAddedValues = this.filterUnaddedValues();
-          
+    toggleSelection(item:any) {
+      item.selected = !item.selected;
+      if (item.selected) {
+        this._listOfAddedValues.push(item);
+      } else {
+        const i = this._listOfAddedValues.findIndex(value => value.item === item.item );
+        this._listOfAddedValues.splice(i, 1);
       }
-
-      filterUnaddedValues(){
-        return this.listOfValues.filter(option => 
-          !this.listOfAddedValues.some(addedValue => addedValue.toLowerCase() === option.viewValue.toLowerCase())
-        );
-      }
+  
+    }
 }
