@@ -1,12 +1,11 @@
 <mat-form-field appearance="outline">
-    <mat-label id="labelField">{{fieldName}}</mat-label>
+    <mat-label id="labelField">{{label}}</mat-label>
     <mat-chip-grid #chipGrid aria-label="Enter values">
       
       <mat-chip-row 
-        *ngFor="let addedValue of listOfAddedValues"
+        *ngFor="let addedValue of _listOfAddedValues"
         (removed)="remove(addedValue)"
         [editable]="false"
-        (edited)="edit(addedValue, $event)"
         [aria-description]="'press enter to edit ' + addedValue">
         {{addedValue}}
         <button matChipRemove [attr.aria-label]="'remove ' + addedValue">
@@ -15,7 +14,8 @@
       </mat-chip-row>
       <input matInput 
             #inputField
-             [placeholder]="placeholder" 
+             [placeholder]="placeholder"
+             [id]="id"
              [matChipInputFor]="chipGrid"
              [matAutocomplete]="auto"
              [formControl]="searchText"
@@ -24,10 +24,20 @@
              (keyup)="filterList()"
             >
   
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let value of filteredListOfAddedValues" [value]="value.viewValue" (click)="add(value.viewValue, inputField)">
-        {{ value.viewValue }}
-      </mat-option>
+    <mat-autocomplete  #auto="matAutocomplete">
+      <ng-container *ngIf="hasSubValues; else flatOptions">
+      <mat-optgroup *ngFor="let group of filteredListOfAddedValues" [label]="group[key]">
+        <mat-option *ngFor="let value of group[subValueKeys[0]]" [value]="value" (click)="add(value[subValueKeys[1]], inputField)">
+          {{ value[subValueKeys[1]] }}
+        </mat-option>
+      </mat-optgroup>
+      </ng-container>
+      <ng-template #flatOptions>
+        <mat-option *ngFor="let value of filteredListOfAddedValues" [value]="value[key]" (click)="add(value[key], inputField)">
+          {{ value[key] }}
+        </mat-option>
+      </ng-template>
+      
     </mat-autocomplete>
 
 </mat-chip-grid>
