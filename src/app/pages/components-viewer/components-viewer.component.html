@@ -8,11 +8,23 @@
         label="List of Items"
         id="list-search"
         key="name"
-        [hasSubValues]="hasSubValues"
+        [hasSubValues]="!hasSubValues"
         [subValueKeys]="subValueKeys"
         [listOfAddedValues]="listOfAddedValues"
-        (changeEvent)="changeEvent($event)"
+        (changeEvent)="changeEvent($event, 'listOfAddedValues')"
         ></app-mat-input-chip-with-search>
+
+        <div class="selected-menu">
+            <app-mat-input-chip-with-search
+            [listOfValues]="listOfElement"
+            label="List of Items"
+            id="list-search-sub"
+            key="name"
+            [hasSubValues]="hasSubValues"
+            [subValueKeys]="subValueKeys"
+            [listOfAddedValues]="listOfAddedValues1"
+            (changeEvent)="changeEvent($event, 'listOfAddedValues1')"
+            ></app-mat-input-chip-with-search>
     </div>
 </div>
   

@@ -12,6 +12,7 @@ export class ComponentsViewerComponent {
 
 selectedMenu!: string;
 listOfAddedValues: any[] = [];
+listOfAddedValues1: any[] = [];
 hasSubValues = true;
 subValueKeys: any[] = ["subValues", "name"]
 listOfElement:any[]=  [
@@ -28,12 +29,13 @@ listOfElement:any[]=  [
       }]
     }
   ];
+[key: string]: any;
 
 handleEvent(menuItem: string) {
  this.selectedMenu = menuItem
 }
 
-changeEvent($event: any){
-    this.listOfAddedValues=[...$event];
+changeEvent($event: any, target: keyof ComponentsViewerComponent){
+    this[target]=[...$event];
 }
 }

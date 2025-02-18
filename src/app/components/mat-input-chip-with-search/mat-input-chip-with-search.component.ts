@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MaterialsModule } from '../../materials/materials.module';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 export class ItemList {
   constructor(
@@ -45,7 +46,6 @@ export class MatInputChipWithSearchComponent {
   @Output() changeEvent = new EventEmitter<any[]>();
   @Input() hasSubValues:boolean = false;
   @Input() subValueKeys: any[] = []
-  
 
   remove(addedValue: any): void {
     const index = this._listOfAddedValues.indexOf(addedValue);
@@ -53,9 +53,13 @@ export class MatInputChipWithSearchComponent {
       this._listOfAddedValues.splice(index, 1);
     }
     this.filteredListOfAddedValues = this.filterUnaddedValues();
-    this.changeEvent.emit([...this._listOfAddedValues]);
+    this.eventEmit();
   }
 
+
+  eventEmit(){
+    this.changeEvent.emit([...this._listOfAddedValues]);
+  }
     
   add(event:any, inputField: HTMLInputElement): void {
     const value = event.trim();
@@ -65,7 +69,7 @@ export class MatInputChipWithSearchComponent {
     this.filteredListOfAddedValues = this.filterUnaddedValues();
     inputField.value = '';
     this.searchText.setValue('');
-    this.changeEvent.emit([...this._listOfAddedValues]);
+    this.eventEmit();
   }
 
   filterList() {
@@ -90,7 +94,7 @@ export class MatInputChipWithSearchComponent {
         event.chipInput!.clear();
         this.searchText.setValue('');
         this.filteredListOfAddedValues = this.filterUnaddedValues();
-        this.changeEvent.emit([...this._listOfAddedValues]);
+        this.eventEmit();
     }
 
     filterUnaddedValues(){
@@ -112,5 +116,12 @@ export class MatInputChipWithSearchComponent {
         this._listOfAddedValues.splice(i, 1);
       }
   
+    }
+
+    onOptionSelected(event: MatAutocompleteSelectedEvent, autoCompleteTrigger: MatAutocompleteTrigger) {
+      // event.option._getHostElement().click(); // Ensures selection
+      // event.option._getHostElement().focus(); // Keeps the input focused
+      // autoCompleteTrigger. openPanel();
+      setTimeout(() => autoCompleteTrigger.openPanel(), 0); // Reopen dropdown after selection
     }
 }
