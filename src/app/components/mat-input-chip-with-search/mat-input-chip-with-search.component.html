@@ -21,10 +21,12 @@
              [formControl]="searchText"
              (matChipInputTokenEnd)="addOnEnter($event)"
              aria-labelledby="labelField" 
+            #autoCompleteTrigger="matAutocompleteTrigger"
              (keyup)="filterList()"
             >
+            <mat-icon>expand_more</mat-icon> 
   
-    <mat-autocomplete  #auto="matAutocomplete">
+    <mat-autocomplete  #auto="matAutocomplete" (optionSelected)="onOptionSelected($event, autoCompleteTrigger)">
       <ng-container *ngIf="hasSubValues; else flatOptions">
       <mat-optgroup *ngFor="let group of filteredListOfAddedValues" [label]="group[key]">
         <mat-option *ngFor="let value of group[subValueKeys[0]]" [value]="value" (click)="add(value[subValueKeys[1]], inputField)">
